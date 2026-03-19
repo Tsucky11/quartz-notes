@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Tsucky Site",
+    pageTitle: "Tsucky notes",
     pageTitleSuffix: "",
     enableSPA: true,
     // リンクにカーソルが合わせられた場合、ページのプレビューのポップアップを表示するか
@@ -17,7 +17,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     // デフォ言語、翻訳の際に参照される
-    locale: "en-US",
+    locale: "ja-JP",
     // サイトの標準 ‘ホーム’ がどこにあるかを知るための絶対 URL を必要とするサイトマップや RSS フィードに使用されます。
     baseUrl: "quartz.jzhao.xyz",
     ignorePatterns: ["private", "templates", ".obsidian"],
