@@ -70,7 +70,7 @@ export const defaultListPageLayout: PageLayout = {
         // internal:内部資料・補足ページ
         // nav-hidden:Explorerにだけ出さない意図を明確に
         if (name === "private" || name === "nav-hidden" || name === "internal") return false
-        if (slug.startsWith("private/") || slug.startsWith("nav-hidden/")) || slug.startsWith("internal/")) return false
+        if (slug.startsWith("private/") || slug.startsWith("nav-hidden/") || slug.startsWith("internal/")) return false
 
         return true
       },
