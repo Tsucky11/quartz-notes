@@ -103,26 +103,36 @@ const config: QuartzConfig = {
       同名ファイルがあって曖昧ならフルパス寄りになる
       **/
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
+      // 各ページの説明文を生成・処理するプラグイン。description frontmatter や本文要約をもとに、ページ説明やプレビュー用テキストに使われる。
       Plugin.Description(),
+      // 数式を描画。KaTeX か MathJax
       Plugin.Latex({ renderEngine: "katex" }),
     ],
+    // draft: true のノートなど、下書きを除外するフィルタ。
+    // frontmatter に`draft: true`
     filters: [Plugin.RemoveDrafts()],
-    emitters: [
-      Plugin.AliasRedirects(),
-      Plugin.ComponentResources(),
-      Plugin.ContentPage(),
-      Plugin.FolderPage(),
-      Plugin.TagPage(),
-      Plugin.ContentIndex({
-        enableSiteMap: true,
-        enableRSS: true,
+    // 最終的に何を出力するかを決める段階。Quartz では emitter がページやRSSや各種ファイルを生成する
+    emitters: [ 
+      Plugin.AliasRedirects(), // aliases からリダイレクトを作る。旧ノート名や別名でアクセスしても本ページに飛ばしやすくする用途。
+      Plugin.ComponentResources(),　// Quartz の各コンポーネントが必要とするCSSやJSなどのリソースを出力
+      Plugin.ContentPage(), // Markdownごとの通常ページを生成する、Quartz の中核プラグイン。これが無いと各ノートの本文ページ自体が出なくなる。
+      Plugin.FolderPage(), // フォルダごとの一覧ページを作る。content/diary/ があれば、そのフォルダの索引ページを出す用途
+      Plugin.TagPage(), // タグ一覧ページ・各タグページを作る。タグ運用を可視化したい時に重要。
+      Plugin.ContentIndex({ // サイト全体のインデックスを作るプラグイン。ここで サイトマップ と RSS を有効化
+        enableSiteMap: true, // sitemap.xml を出す
+        enableRSS: true, // RSS フィードを出す
       }),
-      Plugin.Assets(),
-      Plugin.Static(),
-      Plugin.Favicon(),
-      Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      Plugin.Assets(), // フォルダ内の 非Markdownファイル を出力。画像、動画、PDF、HTML などが対象
+      /** quartz/static 内の静的ファイルを出力
+      Assets との違い
+      Assets() → content 配下の添付物
+      Static() → quartz/static 配下のサイト用固定ファイル
+      **/
+      Plugin.Static(), 
+      Plugin.Favicon(), // ファビコンを出力する。ブラウザタブの小さいアイコン関連。
+      Plugin.NotFoundPage(), // 404ページを生成する
+      // Comment out CustomOgImages to speed up build time（ビルド時間が伸びることがあるので、重ければ無効化候補。）
+      Plugin.CustomOgImages(), // OGP画像を自動生成。SNS共有時のリンクカード画像向け。
     ],
   },
 }
