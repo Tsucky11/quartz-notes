@@ -62,7 +62,19 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    // Explorer からは見えないけど、ページ自体は公開されたまま
+    Component.Explorer({ // 以下追加分
+      filterFn: (node) => {
+        const name = node.displayName.toLowerCase()
+        const slug = node.data?.slug ?? ""
+        // internal:内部資料・補足ページ
+        // nav-hidden:Explorerにだけ出さない意図を明確に
+        if (name === "private" || name === "nav-hidden" || name === "internal") return false
+        if (slug.startsWith("private/") || slug.startsWith("nav-hidden/")) || slug.startsWith("internal/")) return false
+
+        return true
+      },
+    }),
   ],
   right: [],
 }
