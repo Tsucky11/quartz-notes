@@ -6,5 +6,6 @@ tsconfig.tsbuildinfo
 .obsidian
 .quartz-cache
 private/
+nav-hidden/
 .replit
 replit.nix
