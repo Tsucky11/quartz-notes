@@ -6,9 +6,14 @@ const publicOnlyFilter = (node: any) => {
   const name = node.displayName?.toLowerCase?.() ?? ""
   const slug = node.data?.slug ?? ""
 
+  // サイトルートとトップページは残す
   if (slug === "" || slug === "index") return true
+  // public フォルダ本体は残す
   if (name === "public" || slug === "public") return true
+  // public 配下のファイルは残す
   if (slug.startsWith("public/")) return true
+  // public 配下を子孫に持つフォルダだけ残す
+  if (node.isFolder && hasPublicDescendant(node)) return true
 
   return false
 }
