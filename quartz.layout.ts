@@ -51,7 +51,10 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      filterFn: publicOnlyFilter,
+      useSavedState: false,
+    })
   ],
   right: [
     Component.Graph(),
