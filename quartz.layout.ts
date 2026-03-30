@@ -1,6 +1,19 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
+// Explorer からは見えないけど、ページ自体は公開されたまま
+const publicOnlyFilter = (node: any) => {
+  const name = node.displayName?.toLowerCase?.() ?? ""
+  const slug = node.data?.slug ?? ""
+
+  if (slug === "" || slug === "index") return true
+  if (name === "public" || slug === "public") return true
+  if (slug.startsWith("public/")) return true
+
+  return false
+}
+
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -63,17 +76,9 @@ export const defaultListPageLayout: PageLayout = {
       ],
     }),
     // Explorer からは見えないけど、ページ自体は公開されたまま
-    Component.Explorer({ // 以下追加分
-      filterFn: (node) => {
-        const name = node.displayName.toLowerCase()
-        const slug = node.data?.slug ?? ""
-        // internal:内部資料・補足ページ
-        // nav-hidden:Explorerにだけ出さない意図を明確に
-        if (name === "private" || name === "nav-hidden" || name === "internal") return false
-        if (slug.startsWith("private/") || slug.startsWith("nav-hidden/") || slug.startsWith("internal/")) return false
-
-        return true
-      },
+    Component.Explorer({
+      filterFn: publicOnlyFilter,
+      useSavedState: false,
     }),
   ],
   right: [],
